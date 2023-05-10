@@ -8,11 +8,9 @@ public class Prac1 {
         int sum = 0;
 
         String s = sc.next();
-
-        int nList[] = new int[n];
+        char c[] = s.toCharArray(); //string -> charArray
         for(int i=0;i<n;i++) {
-            nList[i] = s.charAt(i) - '0';  //문자 0의 아스키 코드값 48을 빼준다
-            sum += nList[i];
+            sum += c[i] - '0';
         }
         System.out.println(sum);
 
