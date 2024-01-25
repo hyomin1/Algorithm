@@ -33,8 +33,6 @@ public class Prac7 {
                 i++;
             }
         }
-        //StringTokenizer st = new StringTokenizer(str);
-        //char []c = str.toCharArray();
         if (check==true) {
             System.out.println(bf);
 
