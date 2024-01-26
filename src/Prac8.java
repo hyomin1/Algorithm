@@ -12,17 +12,11 @@ public class Prac8 {
         for(int i = 1; i <=N;i++) {
             queue.add(i);
         }
-        while(true) {
-            if(queue.size() == 1) {
-                int res = queue.remove();
-                System.out.println(res);
-                break;
-            }
-            int tmp1 = queue.remove();
-            int tmp2 = queue.remove();
-
-            queue.add(tmp2);
+        while(queue.size() > 1) {
+            queue.poll();
+            queue.add(queue.poll());
         }
+        System.out.println(queue.poll());
 
     }
 }
