@@ -3,25 +3,25 @@ import java.util.Scanner;
 public class Prac4 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-
         int N = sc.nextInt();
-        int count =1, sum = 1, start = 1, end = 1;
+        int start = 1, end = 1, count = 1, sum = 1;
 
-        while (end != N) {
-            if (sum == N) {
+        while(end!=N) {
+            if(sum == N) {
                 count++;
                 end++;
                 sum += end;
             }
-            else if (sum > N) {
+            else if(sum > N) {
                 sum -= start;
                 start++;
             }
-            else if (sum < N) {
+            else {
                 end++;
-                sum += end;
+                sum+=end;
             }
         }
         System.out.println(count);
+
     }
 }

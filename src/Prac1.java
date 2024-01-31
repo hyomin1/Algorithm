@@ -1,30 +1,19 @@
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Prac1 {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        String str = br.readLine();
+        char c[] = str.toCharArray();
 
-        int n = sc.nextInt();
         int sum = 0;
-
-        String s = sc.next();
-        char c[] = s.toCharArray(); //string -> charArray
-        for(int i=0;i<n;i++) {
+        for (int i = 0; i < c.length; i++) {
             sum += c[i] - '0';
         }
         System.out.println(sum);
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
+
