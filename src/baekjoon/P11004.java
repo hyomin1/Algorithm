@@ -12,6 +12,7 @@ public class P11004 {
         int[] A = new int[N];
 
         st = new StringTokenizer(br.readLine());
+
         for(int i = 0; i<N;i++) {
             A[i] = Integer.parseInt(st.nextToken());
         }
