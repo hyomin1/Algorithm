@@ -24,9 +24,11 @@ public class P11650 {
             }
         });
         for (int[] ints : A) {
-            System.out.println(ints[0] +" " + ints[1]);
+            bw.write(ints[0] +" " + ints[1]+"\n");
 
         }
+        bw.flush();
+        bw.close();
 
 
     }
