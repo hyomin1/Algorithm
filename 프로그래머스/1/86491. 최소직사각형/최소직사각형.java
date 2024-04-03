@@ -1,15 +1,24 @@
 class Solution {
     public int solution(int[][] sizes) {
-        int long_max = 1;
-        int short_max = 1;
+        int[] rect = new int[sizes.length];
         for(int i = 0; i < sizes.length; i++) {
-            int max = Math.max(sizes[i][0],sizes[i][1]);
-            int min = Math.min(sizes[i][0], sizes[i][1]);
-            if(max > long_max) long_max = max; //긴 길이중 가장 긴 길이
-            if(min > short_max) short_max = min; // 짧은 길이중 가장 긴 길이
+            rect[i] = sizes[i][0] * sizes[i][1];
         }
-        
-        
-        return long_max * short_max;
+        int max = 0;
+        for(int i = 0; i < rect.length;i++) {
+            max = Math.max(max, rect[i]);
+        }
+        int min = 1000001;
+        for(int i = 0; i < sizes.length; i++) {
+            for(int j = 0; j <sizes.length; j++) {
+                int res = sizes[i][0] * sizes[j][1];
+                if(res > max) {
+                    min = Math.min(min,res);
+                }
+            }
+             
+        }
+        int answer = min;
+        return answer;
     }
 }
