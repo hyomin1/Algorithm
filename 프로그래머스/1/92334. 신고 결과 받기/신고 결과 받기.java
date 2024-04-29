@@ -12,13 +12,13 @@ class Solution {
         for(int i = 0; i < report.length; i++) {
             String[] str = report[i].split(" ");
             if(!reportMap.get(str[1]).contains(str[0])) {
-                reportMap.get(str[1]).add(str[0]);
+                reportMap.get(str[1]).add(str[0]); //신고 받은 사람에 신고 한 사람 리스트 저장
             }
         }
         
         for(String str : reportMap.keySet()) {
-            if (k <= reportMap.get(str).size()) {
-                for (String rep : reportMap.get(str)) {
+            if (k <= reportMap.get(str).size()) { // k회 이상 신고 받을시
+                for (String rep : reportMap.get(str)) { // 신고한 사람 배열 count ++
                     answer[map.get(rep)]++;
                 }
             }
