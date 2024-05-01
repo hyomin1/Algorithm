@@ -46,9 +46,7 @@ class Solution {
                 
             }
         }
-        for(int i : nextGift) {
-            System.out.print(i + " ");
-        }
+        
         Arrays.sort(nextGift);
         answer = nextGift[nextGift.length-1];
         
