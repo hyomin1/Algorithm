@@ -10,26 +10,12 @@ class Solution {
             int n = Integer.parseInt(str[i]);
             map.put(n,map.getOrDefault(n,0)+1);
         }
-        int cnt = 0;
+        int[] answer = new int[map.size()];
+
         for(int key : map.keySet()) {
+            answer[map.size() - map.get(key)] = key;
+        }
         
-            cnt++;
-        }
-        int[] values = new int[cnt];
-        int[] answer = new int[cnt];
-        int index = 0;
-        for(int key : map.keySet()) {
-            values[index++] = map.get(key);
-        }
-        Arrays.sort(values);
-        int size = values.length-1;
-        for(int i = 0 ; i< values.length; i++) {
-            for(int key: map.keySet()) {
-                if(values[i] == map.get(key)) {
-                    answer[size--] = key;
-                }
-            }
-        }
         
         
         
