@@ -9,21 +9,21 @@ class Solution {
         for(int i = 0; i < cities.length; i++) {
             cities[i] = cities[i].toLowerCase();
             if(list.contains(cities[i])) {
-                int index = list.indexOf(cities[i]);
-                list.remove(index);
+                list.remove(cities[i]);
                 list.add(cities[i]);
                 answer++;
                 continue;
             }
             if (list.size() < cacheSize) {
                 list.add(cities[i]);
-                answer += 5;
+                
             }
             else {
                 list.remove(0);
                 list.add(cities[i]);
-                answer += 5;
+                
             }
+            answer += 5;
         }
         return answer;
     }
