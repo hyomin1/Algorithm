@@ -26,7 +26,6 @@ class Solution {
             if(!list.contains(chk1) && !list.contains(chk2) && !currentPos.equals(movPos)) {
                 answer++;
                 list.add(chk1);
-                System.out.println(chk1);
                 list.add(chk2);
             }
         }
