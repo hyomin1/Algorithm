@@ -29,18 +29,15 @@ class Solution {
             else {
                 double res = (double)(time-fees[0]) % fees[2];
                 int plusFee = 0;
-                if(res != 0.0) {
+                if(res != 0.0) { // 초과시간 나누어 떨어지지 않는 경우
                     res = Math.ceil((double)(time-fees[0]) / fees[2]);
-                    plusFee = (int)res * fees[3];
-                    
-                    
+                    plusFee = (int)res * fees[3];               
                 }
                 else {
                      plusFee = (time - fees[0]) / fees[2] * fees[3];
                 }
                 int fee = fees[1] + plusFee;
                 feeMap.put(key, fee);
-               
             }
         }
         int[] sortedKey = new int[feeMap.size()];
