@@ -1,6 +1,6 @@
 # [level 1] 이상한 문자 만들기 - 12930 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/12930?language=javascript) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/12930) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 06월 27일 14:49:27
+2024년 06월 28일 16:37:26
 
 ### 문제 설명
 
