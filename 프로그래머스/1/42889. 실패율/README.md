@@ -1,10 +1,10 @@
 # [level 1] 실패율 - 42889 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/42889) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/42889?language=javascript) 
 
 ### 성능 요약
 
-메모리: 77.7 MB, 시간: 6.34 ms
+메모리: 33.5 MB, 시간: 0.10 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 04월 06일 17:36:11
+2024년 07월 02일 17:48:10
 
 ### 문제 설명
 
