@@ -1,33 +1,26 @@
 function solution(dartResult) {
     var answer = 0;
-    let str = '';
-    let index = -1;
-    const nums = [];
+    let curNumber = '';
+
+    const bonus = {'S': 1, 'D':2, 'T':3};
+    const option = {'*' : 2, '#': -1};
+    const scores = [];
     for(let i = 0; i < dartResult.length; i++) {
-        const c = dartResult[i];
-        if (c >= '0' && c <= '9') {
-            str += c;
+        const char = dartResult[i];
+        if (!isNaN(char)) {
+            curNumber += char;
         }
-        else if (c === 'S' || c === 'D' || c === 'T') {
-            let num = parseInt(str);
-            
-            index++;
-            if (c === 'S') {
-               num **=  1; 
-            } else if (c === 'D') {
-                num **= 2;
-            } else num **= 3; 
-            str = '';
-            nums[index] = num;
+        else if (bonus[char]) {
+            scores.push(Math.pow(Number(curNumber),bonus[char]));
+            curNumber = '';
         } else {
-            if (c === '*') {
-                nums[index] *= 2;
-                if (index > 0) nums[index - 1] *= 2;
-            } else {
-                nums[index] *= -1
-            }
+           scores[scores.length -1] *= option[char];
+           if(char === '*' && scores.length > 1) {
+               scores[scores.length - 2] *= option[char];
+           }
         }
     }
-    nums.forEach((num) => answer += num);
+    
+    answer = scores.reduce((sum, score) => sum + score, 0);
     return answer;
 }
