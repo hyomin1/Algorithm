@@ -1,18 +1,17 @@
 function solution(N, stages) {
     var answer = [];
-    let fails = [];
+    const failure = [];
+
     for(let i = 1; i <= N; i++) {
-        let a=0, b=0;
+        let arrived = 0, unclear = 0;
         for(let j = 0; j < stages.length; j++) {
-            if(stages[j] >= i) a++;
-            if(stages[j] === i) b++;
+            if (stages[j] >= i) arrived++;
+            if (stages[j] === i) unclear++;
         }
-        if(a === 0) fails.push({stage:i,failure:0});
-        else fails.push({stage:i,failure:b/a});
+        
+        failure[i-1] = unclear / arrived;
     }
-    fails.sort((a,b) => b.failure-a.failure);
-    fails.forEach((v) => answer.push(v.stage));
-    
-    
+    const arr = failure.map((v, i) => ({v,i})).sort((a, b) => b.v - a.v);
+    answer = arr.map((v) => v.i += 1);
     return answer;
 }
