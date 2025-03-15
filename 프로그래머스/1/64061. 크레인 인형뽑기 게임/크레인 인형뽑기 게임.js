@@ -21,6 +21,5 @@ function solution(board, moves) {
             }
         }
     }
-    console.log(board);
     return answer;
 }
