@@ -34,9 +34,8 @@ function solution(friends, gifts) {
     console.log(map);
     for (let i = 0; i < friends.length; i++) {
         const me = friends[i];
-        for (let j = 0; j < friends.length; j++) {
+        for (let j = i + 1; j < friends.length; j++) {
             const other = friends[j];
-            if(me === other) continue;
            
             if (map[me][other] > map[other][me]) {
                 answerMap[me]++;
@@ -52,7 +51,7 @@ function solution(friends, gifts) {
     }
     const arr = Object.values(answerMap);
   
-    answer = Math.max(...arr) / 2;
+    answer = Math.max(...arr);
    
     return answer;
 }
