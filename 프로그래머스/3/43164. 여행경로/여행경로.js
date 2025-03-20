@@ -13,7 +13,7 @@ function dfs(currentNode, graph, used, tickets, answer) {
         }
     }
     answer.pop();
-   
+    return false;
 }
 
 function solution(tickets) {
