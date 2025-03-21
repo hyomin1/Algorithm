@@ -1,13 +1,14 @@
-function dfs(index ,sum, numbers, target) {
-    if(index === numbers.length) {
-        return sum === target ? 1 : 0;
+function dfs(depth,current,numbers,target) {
+    if (depth === numbers.length) {
+        return current === target ? 1 : 0;
     }
+    return dfs(depth+1,current + numbers[depth],numbers,target) + dfs(depth+1, current - numbers[depth],numbers,target);
     
-    return dfs(index + 1, sum + numbers[index], numbers,target) +
-        dfs(index + 1, sum - numbers[index], numbers, target);
+    
 }
 
 function solution(numbers, target) {
-    return dfs(0,0,numbers,target)
+    var answer = 0;
+    answer = dfs(0,0,numbers,target);
+    return answer;
 }
-
