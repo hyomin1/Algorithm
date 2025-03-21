@@ -1,21 +1,22 @@
-function dfs(node,graph,visited) {
+function dfs(node, graph, visited) {
     visited[node] = true;
     let count = 1;
-    for (const n of graph[node]) {
-        if(!visited[n]) {
-            visited[n] = true;
-            count += dfs(n,graph,visited);
+    for (const next of graph[node]) {
+        if (!visited[next]) {
+            visited[next] = true;
+            count += dfs(next, graph, visited);
         }
     }
     return count;
 }
 
 function solution(n, wires) {
-    let answer = Infinity;
+    var answer = Infinity;
+    const graph = {};
+    
     for (let i = 0; i < wires.length; i++) {
-        const graph = {};
         for (let j = 1; j <= n; j++) {
-          graph[j] = [];
+            graph[j] = [];
         }
         for (let j = 0; j < wires.length; j++) {
             if (i !== j) {
@@ -27,8 +28,8 @@ function solution(n, wires) {
         const visited = Array(n+1).fill(false);
         const first = dfs(1,graph,visited);
         const second = n - first;
-        const diff = Math.abs(first - second);
-        answer = Math.min(diff,answer);
+        answer = Math.min(answer,Math.abs(first-second));
+        
     }
     return answer;
 }
