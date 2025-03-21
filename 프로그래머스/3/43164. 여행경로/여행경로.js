@@ -1,34 +1,31 @@
-function dfs(currentNode, graph, used, tickets, answer) {
-    answer.push(currentNode);
+function dfs(start, tickets, used, answer) {
+    answer.push(start);
     
-    if(answer.length === tickets.length + 1) return true;
-    if(graph[currentNode]) {
-        for (const nextNode of graph[currentNode]) {
-            const index = tickets.findIndex((ticket,index) => !used[index] && currentNode === ticket[0] && nextNode === ticket[1])
-            if (index !== -1) {
-                used[index] = true;
-                if(dfs(nextNode,graph,used,tickets,answer)) return true;
-                used[index] = false;
-            }
+    if (answer.length === tickets.length + 1) return true;
+    for (let i = 0; i < tickets.length; i++) {
+        const [src, dest] = tickets[i];
+        
+        if(!used[i] && start === src) {
+            used[i] = true;
+            
+            if (dfs(dest,tickets,used,answer)) return true;
+            used[i] = false;
+            answer.pop();
         }
     }
-    answer.pop();
     return false;
 }
 
 function solution(tickets) {
     var answer = [];
-    const graph = {};
-    tickets.sort((a,b) => {
-        if (a[0] === b[0]) return a[1].localeCompare(b[1]);
+    tickets.sort((a, b) => {
+        if (a[0] === b[0]) {
+            return a[1].localeCompare(b[1]);
+        }
         return a[0].localeCompare(b[0]);
-    });
-    for (let i = 0; i < tickets.length; i++) {
-        const [start, end] = tickets[i];
-        if(graph[start]) graph[start].push(end);
-        else graph[start] = [end];
-    }
+    })
     const used = Array(tickets.length).fill(false);
-    dfs('ICN',graph, used, tickets, answer);
+    dfs('ICN',tickets,used,answer);
     return answer;
+    
 }
