@@ -1,24 +1,24 @@
 function solution(maps) {
     var answer = 0;
-    const rows = maps.length;
-    const cols = maps[0].length;
     
-    const visited = Array(rows).fill().map(()=>Array(cols).fill(-1));
-    const dx = [1,-1,0,0];
-    const dy = [0,0,1,-1];
+    const m = maps.length;
+    const n = maps[0].length;
+    const visited = Array(m).fill().map(()=>Array(n).fill(-1));
+    const dx = [0,0,1,-1];
+    const dy = [1,-1,0,0];
     
-    const queue = [[0,0]];
     visited[0][0] = 1;
-    while(queue.length > 0) {
-        const [y,x] = queue.shift();
-        if (y === rows - 1 && x === cols-1) {
+    const queue = [[0,0]];
+    
+    while (queue.length > 0) {
+        const [y, x] = queue.shift();
+        if(y === m-1 && x === n-1) {
             return visited[y][x];
         }
-        for (let i = 0; i < 4; i++) {
-            const ny = y + dy[i];
-            const nx = x + dx[i];
-            if (ny >= 0 && nx >= 0 && ny < rows && nx < cols &&
-               maps[ny][nx] === 1 && visited[ny][nx] === -1) {
+        for(let i = 0; i < 4; i++) {
+            const nx = dx[i] + x;
+            const ny = dy[i] + y;
+            if(nx >= 0 && ny >= 0 && nx < n && ny < m && maps[ny][nx] === 1 && visited[ny][nx] === -1) {
                 visited[ny][nx] = visited[y][x] + 1;
                 queue.push([ny,nx]);
             }
