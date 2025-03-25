@@ -6,8 +6,8 @@ function solution(numbers) {
         }
     }
    
-    const set = new Set(answer);
-    answer = [...set].sort((a,b) => a - b);
+    
+    answer = [...new Set(answer)].sort((a,b) => a - b);
    
     return answer;
 }
