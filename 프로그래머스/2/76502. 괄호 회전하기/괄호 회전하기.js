@@ -1,33 +1,31 @@
-function isRight(s) {
-    const stack = [];
-    for (let i = 0; i < s.length; i++) {
-        const c = s[i];
-        if(c === '(' || c === '{' || c === '[') stack.push(c);
-        else {
-            if (stack.length < 1) return false;
-            else {
-                if (c === ')' && stack[stack.length-1] == '(') stack.pop();
-                else if (c === '}' && stack[stack.length-1] === '{') stack.pop();
-                else if (c === ']' && stack[stack.length-1] === '[') stack.pop();
-            }
-            
-        }
-    }
-    return stack.length > 0 ? false : true;
-}
-
 function solution(s) {
     var answer = 0;
-    const str = s;
-    for(let i = 0; i < s.length; i++) {
-        const arr = str.split('');
-        for(let j = 0; j < i; j++) {
-            arr.push(arr.shift());
+    const n = s.length;
+    
+    for (let i = 0; i < n; i++) {
+        const stack = [];
+        let isCorrect = true;
+        for (let j = 0; j < n; j++) {
+            const c = s[(i+j) % n];
+            if (c === '(' || c === '{' || c === '[') {
+                stack.push(c);
+            } else {
+                if (stack.length === 0) {
+                    isCorrect = false;
+                    break;
+                }
+                
+                const top = stack[stack.length - 1];
+                if (c === ']' && top === '[') stack.pop();
+                else if (c === '}' && top === '{') stack.pop();
+                else if (c === ')' && top === '(') stack.pop();
+                else {
+                    isCorrect = false;
+                    break;
+                }
+             }
         }
-        s = arr.join('');
-        if(isRight(s)) {
-            answer++;
-        }
+        if (isCorrect && stack.length === 0) answer++;
     }
     return answer;
 }
