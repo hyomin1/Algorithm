@@ -1,17 +1,24 @@
 function solution(board, moves) {
-    var answer = 0;
     const rows = board.length;
-    const stack = [];
+    const lanes = Array(rows).fill().map(() => []);
+
+    for (let i = rows - 1; i >= 0; i--) {
+        for (let j = 0; j < board[i].length; j++) {
+            if (board[i][j]) lanes[j].push(board[i][j]);
+        }
+    }
+    
+    var answer = 0;
+    const bucket = [];
     for (const move of moves) {
-        for (let i = 0; i < rows; i++) {
-            if (board[i][move-1] !== 0) {
-                if (stack.length > 0 && stack[stack.length -1] === board[i][move-1]) {
-                    stack.pop();
-                    answer += 2;
-                } else stack.push(board[i][move-1]);
-                board[i][move-1] = 0;
-                break;
-            }
+        
+        if (lanes[move - 1].length > 0) {
+            const doll = lanes[move-1].pop();
+            
+            if (bucket.length > 0 && bucket[bucket.length - 1] === doll) {
+                bucket.pop();
+                answer += 2;
+            } else bucket.push(doll);
         }
     }
     return answer;
