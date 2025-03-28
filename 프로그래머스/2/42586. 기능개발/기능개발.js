@@ -1,24 +1,17 @@
 function solution(progresses, speeds) {
     var answer = [];
-    const arr = [];
-    for (let i = 0; i < progresses.length; i++) {
-        const remain = 100 - progresses[i];
-        if (remain % speeds[i] === 0) {
-            arr.push(remain / speeds[i]);
-        } else {
-            arr.push(Math.floor(remain/ speeds[i]) + 1);
-        }
-    }
+    const daysLeft = progresses.map((progress, i) => Math.ceil((100 - progress) / speeds[i]));
     
-    let min = arr[0];
-    let count = 1;
-    for (let i = 1; i < arr.length; i++) {
-        if (min < arr[i]) {
-            answer.push(count);
-            min = arr[i];
-            count = 1;
-        } else {
+    let count = 0;
+    let maxDay = daysLeft[0];
+    
+    for (let i = 0; i < daysLeft.length; i++) {
+        if (maxDay >= daysLeft[i]) {
             count++;
+        } else {
+            answer.push(count);
+            count = 1;
+            maxDay = daysLeft[i];
         }
     }
     answer.push(count);
