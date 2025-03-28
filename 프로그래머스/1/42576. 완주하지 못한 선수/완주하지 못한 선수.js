@@ -1,14 +1,16 @@
 function solution(participant, completion) {
     var answer = '';
-    const person = {};
-    participant.forEach((v) => {
-        if(!person[v]) person[v] = 1;
-        else person[v] += 1;
-    });
-    completion.forEach((v) => {
-        person[v]--;
-    })
+    const obj = {};
+    for (const p of participant) {
+        obj[p] = (obj[p] || 0) + 1;
+    }
     
-    answer = Object.keys(person).filter((v)=> person[v] === 1);
-    return answer.join('');
+    for (const c of completion) {
+        obj[c]--;
+    }
+    
+    for (const key in obj) {
+        if (obj[key] > 0) return key;
+    }
+    return answer;
 }
