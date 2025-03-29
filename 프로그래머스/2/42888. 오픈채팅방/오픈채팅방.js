@@ -1,16 +1,18 @@
 function solution(record) {
     var answer = [];
-    const map = {};
-    for (const r of record) {
-        const [info, uid, name] = r.split(' ');
-        if(info === 'Enter' || info === 'Change') map[uid] = name;
-        
+    const obj = {};
+    for (let i = 0; i < record.length; i++) {
+        const [cmd, uid, nickname] = record[i].split(' ');
+        if (cmd === 'Enter' || cmd === 'Change') {
+            obj[uid] = nickname;
+        }
     }
-    for (const r of record) {
-        const [info, uid,name] = r.split(' ');
-        if (info === 'Enter') 
-             answer.push(`${map[uid]}님이 들어왔습니다.`);
-        else if (info ==='Leave') answer.push(`${map[uid]}님이 나갔습니다.`);
+    for (let i = 0; i < record.length; i++) {
+        const [cmd, uid] = record[i].split(' ');
+        if (cmd === 'Enter') {
+            answer.push(`${obj[uid]}님이 들어왔습니다.`)
+        } else if (cmd === 'Leave') answer.push(`${obj[uid]}님이 나갔습니다.`);
     }
+    
     return answer;
 }
