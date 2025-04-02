@@ -1,19 +1,15 @@
 function solution(n, words) {
-    var answer = [0,0];
-    const map = {};
-    for (let i = 0; i < words.length; i++) {
-        map[words[i]] = (map[words[i]] || 0) + 1;
-        if (map[words[i]] > 1) {
-            answer[0] = (i % n) + 1;
-            answer[1] = Math.floor(i / n) + 1;
+    var answer = [0, 0];
+    const set = new Set();
+    set.add(words[0]);
+    for (let i = 1; i < words.length; i++) {
+        const prev = words[i-1].slice(-1);
+        const cur = words[i].slice(0,1);
+        if (prev !== cur || set.has(words[i])) {
+            answer =[i % n + 1,Math.floor(i / n) + 1];
             break;
         }
-        if (i > 0 && words[i][0] !== words[i-1][words[i-1].length-1]) {
-             answer[0] = (i % n) + 1;
-            answer[1] = Math.floor(i / n) + 1;
-            break;
-        }
+        set.add(words[i]);
     }
-
     return answer;
 }
