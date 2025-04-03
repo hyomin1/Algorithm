@@ -1,30 +1,31 @@
-function dfs(currentNode, graph, visited) {
-    visited[currentNode] = true;
-    if (!graph[currentNode]) return;
-    for (const nextNode of graph[currentNode]) {
-        if (!visited[nextNode]) {
-            visited[nextNode] = true;
-            dfs(nextNode, graph, visited);
-        }
-    }
-}
+
 
 function solution(n, computers) {
     var answer = 0;
-    const graph = {};
+    const adjList = {};
     for (let i = 0; i < n; i++) {
+        adjList[i] = [];
         for (let j = 0; j < n; j++) {
-            if (i !== j && computers[i][j] === 1) {
-                if (graph[i]) graph[i].push(j);
-                else graph[i] = [j];
+            if(i !== j && computers[i][j] === 1) {
+                adjList[i].push(j);
             }
         }
     }
-    const visited = Array(n).fill(false);
+    const visited = new Set();
+    function dfs(node) {
+        visited.add(node);
+        
+        for (const neighbor of adjList[node] || []) {
+            if (!visited.has(neighbor)) {
+                visited.add(neighbor);
+                dfs(neighbor);
+            }
+        }
+    }
     for (let i = 0; i < n; i++) {
-        if(!visited[i]) {
+        if (!visited.has(i)) {
+            dfs(i);
             answer++;
-            dfs(i,graph,visited);
         }
     }
     return answer;
