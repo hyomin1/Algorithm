@@ -1,29 +1,28 @@
+function isValidMove(x,y,rows,cols, maps,visited) {
+    return x >= 0 && y >= 0 && x < cols && y < rows && maps[y][x] === 1 && visited[y][x] === -1;
+}
+
 function solution(maps) {
     var answer = 0;
+    const queue = [];
+    const rows = maps.length;
+    const cols = maps[0].length;
+    const visited = Array(rows).fill().map(()=>Array(cols).fill(-1));
     
-    const m = maps.length;
-    const n = maps[0].length;
-    const visited = Array(m).fill().map(()=>Array(n).fill(-1));
-    const dx = [0,0,1,-1];
     const dy = [1,-1,0,0];
-    
+    const dx = [0,0,1,-1];
     visited[0][0] = 1;
-    const queue = [[0,0]];
-    
-    while (queue.length > 0) {
-        const [y, x] = queue.shift();
-        if(y === m-1 && x === n-1) {
-            return visited[y][x];
-        }
-        for(let i = 0; i < 4; i++) {
-            const nx = dx[i] + x;
+    queue.push([0,0]);
+    while(queue.length > 0) {
+        const [y,x] = queue.shift();
+        
+        for (let i = 0; i < 4; i++) {
             const ny = dy[i] + y;
-            if(nx >= 0 && ny >= 0 && nx < n && ny < m && maps[ny][nx] === 1 && visited[ny][nx] === -1) {
-                visited[ny][nx] = visited[y][x] + 1;
-                queue.push([ny,nx]);
-            }
+            const nx = dx[i] + x;
+            if(!isValidMove(nx,ny,rows,cols,maps,visited)) continue;
+            visited[ny][nx] = visited[y][x] + 1;
+            queue.push([ny,nx]);
         }
     }
-    
-    return -1;
+    return visited[rows-1][cols-1];
 }
