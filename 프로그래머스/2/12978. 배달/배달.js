@@ -63,12 +63,12 @@ function solution(N, road, K) {
     }
     const queue = new MinHeap();
 
-    queue.push([1,0]); // 1번 출발 , 0
+    queue.push([1,distances[1]]); // 1번 출발 , 0
     while(queue.size() > 0) {
-        const [node, weight] = queue.pop();
+        const [node, distance] = queue.pop();
         
-        for (const [neighbor, nextWeight] of graph[node] || []) {
-            const cost = weight + nextWeight;
+        for (const [neighbor, nextDistance] of graph[node] || []) {
+            const cost = distance + nextDistance;
             if(cost < distances[neighbor]) {
                 distances[neighbor] = cost;
                 queue.push([neighbor,cost]);
