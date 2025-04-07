@@ -1,6 +1,6 @@
 function solution(n) {
     var answer = 0;
-    n = (n +'').split('').map((v) => parseInt(v)).sort((a,b) => b - a);
-    answer = Number(n.join(''));
+    answer = (n+'').split('').sort((a,b) => b - a).join('');
+    answer = Number(answer);
     return answer;
 }
