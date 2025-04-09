@@ -2,12 +2,9 @@ function solution(s) {
     var answer = [];
     let zeroCount = 0;
     let count = 0;
-    while(true) {
-        if(s === '1') break;
+    while(s !== '1') {
         count++;
-        for(let i = 0; i < s.length; i++) {
-            if (s[i] === '0') zeroCount++;
-        }
+        zeroCount += s.split('').filter((v) => v === '0').length;
         s = s.replaceAll('0','');
         s = s.length.toString(2);
 
