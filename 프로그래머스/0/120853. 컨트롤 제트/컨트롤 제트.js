@@ -1,15 +1,12 @@
 function solution(s) {
     var answer = 0;
-    const stack = [];
     s = s.split(' ');
-    console.log(s);
+    let stack = [];
     for (const c of s) {
-        if (c === 'Z') {
-            answer -= stack.pop();
-        } else {
-            stack.push(c);
-            answer += parseInt(c);
-        }
+        if (c === 'Z') stack.pop();
+        else stack.push(c);
     }
+    stack = stack.map(Number);
+    answer = stack.reduce((acc,val) => acc + val,0);
     return answer;
 }
