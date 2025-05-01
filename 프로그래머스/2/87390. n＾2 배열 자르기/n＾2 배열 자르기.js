@@ -5,11 +5,10 @@ function solution(n, left, right) {
     for (let i = left; i <= right; i++) {
         const row = Math.floor(i/n);
         const col = i % n;
-        if (row === col) answer.push(row+1);
-        else {
-            const max = Math.max(row,col);
-            answer.push(max+1);
-        }
+      
+        const max = Math.max(row,col);
+        answer.push(max+1);
+        
     }
     return answer;
 }
