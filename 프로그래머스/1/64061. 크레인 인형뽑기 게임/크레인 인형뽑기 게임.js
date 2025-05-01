@@ -1,24 +1,22 @@
 function solution(board, moves) {
-    const rows = board.length;
-    const lanes = Array(rows).fill().map(() => []);
-
-    for (let i = rows - 1; i >= 0; i--) {
+    var answer = 0;
+    const lanes = Array(board.length).fill().map(() => []);
+    for (let i = board.length - 1; i >= 0; i--) {
         for (let j = 0; j < board[i].length; j++) {
-            if (board[i][j]) lanes[j].push(board[i][j]);
+            const doll = board[i][j];
+            if (doll) lanes[j].push(doll);
         }
     }
-    
-    var answer = 0;
-    const bucket = [];
+   
+    const stack = [];
     for (const move of moves) {
-        
-        if (lanes[move - 1].length > 0) {
-            const doll = lanes[move-1].pop();
-            
-            if (bucket.length > 0 && bucket[bucket.length - 1] === doll) {
-                bucket.pop();
+        const lane = lanes[move-1];
+        if (lane.length > 0) {
+            const doll = lane.pop();
+            if (stack.length > 0 && stack[stack.length - 1] === doll) {
+                stack.pop();
                 answer += 2;
-            } else bucket.push(doll);
+            } else stack.push(doll);
         }
     }
     return answer;
