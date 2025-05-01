@@ -1,23 +1,22 @@
 function solution(n, k, cmd) {
-    const deleted = [];
+    var answer = '';
+    const stack = [];
+    const down = Array(n).fill().map((_,i)=> i+1);
+    const up = Array(n).fill().map((_,i) => i-1);
     
-    const up = Array(n+2).fill().map((_,i) => i - 1);
-    const down = Array(n+2).fill().map((_,i) => i + 1);
-    //console.log(up,down);
-    k++;
-    
-    for (const item of cmd) {
-        if (item[0] === 'C') {
-            deleted.push(k);
+    for (const c of cmd) {
+        if (c[0] === 'C') {
+            stack.push(k);
             up[down[k]] = up[k];
             down[up[k]] = down[k];
-            k = n < down[k] ? up[k] : down[k];
-        } else if (item[0] === 'Z') {
-            const restore = deleted.pop();
+            k = down[k] < n ? down[k] : up[k];                                                                 
+        } else if (c[0] === 'Z') {
+            const restore = stack.pop();
             down[up[restore]] = restore;
             up[down[restore]] = restore;
-        } else {
-            const [action, num] = item.split(' ');
+            
+        } else { // U or D
+            const [action, num] = c.split(' ');
             if (action === 'U') {
                 for (let i = 0; i < num; i++) {
                     k = up[k];
@@ -29,10 +28,11 @@ function solution(n, k, cmd) {
             }
         }
     }
-    let answer = Array(n).fill('O');
-    for (const i of deleted) {
-        answer[i-1] = 'X';
+    let arr = Array(n).fill('O');
+    for (const num of stack) {
+        arr[num] = 'X';
     }
-    answer = answer.join('');
+ 
+    answer = arr.join('');
     return answer;
 }
