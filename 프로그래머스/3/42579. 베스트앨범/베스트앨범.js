@@ -1,19 +1,24 @@
 function solution(genres, plays) {
     var answer = [];
-    const genreObj = {};
-    const playObj = {};
-    genres.forEach((v, i) => {
-        playObj[v] = (playObj[v] || 0) + plays[i];
-        if (genreObj[v]) genreObj[v].push([plays[i], i]);
-        else genreObj[v] = [[plays[i], i]];
-    });
-    const sortedGenres = Object.keys(playObj).sort((a,b) => playObj[b] - playObj[a]);
-    for (const genre of sortedGenres) {
-        let sortedSongs = genreObj[genre].sort((a,b) => {
-            if (a[0] === b[0]) return a[1] - b[1];
-            return b[0] - a[0];
-        })
-        answer.push(...sortedSongs.slice(0,2).map((v)=> v[1]));
+    const play = {};
+    const genre = {};
+    for (const g of genres) {
+        genre[g] = [];
     }
+    for (let i = 0; i < genres.length; i++) {
+        genre[genres[i]].push([i,plays[i]]); 
+        play[genres[i]] = (play[genres[i]] || 0) + plays[i];
+    }
+    
+    const keys = Object.keys(play).sort((a,b) => play[b] - play[a]);
+    for (const key of keys) {
+        genre[key].sort((a,b) => {
+            if (a[1] === b[1]) return a[0] - b[0];
+            return b[1] - a[1];
+        });
+        const arr = genre[key].slice(0,2).map((v) => v[0]);
+        answer.push(...arr);
+    }
+    
     return answer;
 }
