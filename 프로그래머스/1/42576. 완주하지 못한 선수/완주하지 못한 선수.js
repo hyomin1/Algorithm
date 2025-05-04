@@ -10,7 +10,10 @@ function solution(participant, completion) {
     }
     
     for (const key in obj) {
-        if (obj[key] > 0) return key;
+        if (obj[key] > 0) {
+            answer = key;
+            break;
+        }
     }
     return answer;
 }
