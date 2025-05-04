@@ -2,12 +2,12 @@ function combinations(arr, n) {
     if (n === 1) return arr.map((v) => [v]);
     const result = [];
     
-    arr.forEach((fixed, i) => {
-        const rest = arr.slice(i+1);
-        const combis = combinations(rest, n-1);
+    arr.forEach((fixed, idx, origin) => {
+        const rest = origin.slice(idx + 1);
+        const combis = combinations(rest, n - 1);
         const combine = combis.map((v) => [fixed, ...v]);
         result.push(...combine);
-    })
+    });
     return result;
 }
 
@@ -15,9 +15,9 @@ function solution(orders, course) {
     var answer = [];
     for (const c of course) {
         const menu = [];
-        for(const o of orders) {
-            const orderArr = o.split('').sort();
-            const comb = combinations(orderArr, c);
+        for (const o of orders) {
+            const order = o.split('').sort();
+            const comb = combinations(order,c);
             menu.push(...comb);
         }
         const counter = {};
@@ -26,14 +26,12 @@ function solution(orders, course) {
             counter[key] = (counter[key] || 0) + 1;
         }
         const max = Math.max(...Object.values(counter));
-        
         if (max > 1) {
-            for (const key in counter) {
-                if (counter[key] === max) {
-                    answer.push(key);
-                }
+            for (const [key, value] of Object.entries(counter)) {
+                if(value === max) answer.push(key);
             }
         }
     }
+    
     return answer.sort();
 }
