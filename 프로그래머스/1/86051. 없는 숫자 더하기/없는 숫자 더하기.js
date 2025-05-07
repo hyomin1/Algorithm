@@ -1,6 +1,5 @@
 function solution(numbers) {
     var answer = 0;
-    const sum = 45;
-    answer = sum - numbers.reduce((sum,cur) => sum + cur, 0);
+    answer = 45 - numbers.reduce((sum,val) => sum + val, 0);
     return answer;
 }
