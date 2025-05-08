@@ -1,16 +1,11 @@
 function solution(elements) {
     var answer = 0;
     const set = new Set();
-    let n = 1;
+    
     for (let i = 0; i < elements.length; i++) {
-        let sum = elements[i];
-        set.add(sum);
-        let count = 0;
-        let index = i+1;
-        while(count < elements.length-1) {
-            sum += elements[index % elements.length];
-            count++;
-            index++;
+        let sum = 0;
+        for (let j = 0; j < elements.length; j++) {
+            sum += elements[(i+j)%elements.length];
             set.add(sum);
         }
     }
