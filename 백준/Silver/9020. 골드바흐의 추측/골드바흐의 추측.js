@@ -17,42 +17,25 @@ function isPrime(n) {
   return true;
 }
 
-function findPrime(n) {
-  const primes = [];
-  for (let i = 2; i < n; i++) {
-    if (isPrime(i)) {
-      primes.push(i);
-    }
-  }
-  return primes;
-}
-
-function goldBach(n, primes) {
-  const gold = [];
-  const res = [];
-  for (let i = 0; i < primes.length; i++) {
-    for (let j = 0; j < primes.length; j++) {
-      if (primes[i] + primes[j] === n) {
-        gold.push([primes[i], primes[j]]);
+function goldBach(n) {
+  let min = Infinity;
+  let result = [0, 0];
+  for (let a = 2; a <= n; a++) {
+    const b = n - a;
+    if (isPrime(a) && isPrime(b)) {
+      const diff = Math.abs(a - b);
+      if (diff < min) {
+        min = diff;
+        result = [a, b];
       }
     }
   }
-
-  let min = Infinity;
-  for (let i = 0; i < gold.length / 2; i++) {
-    const [a, b] = gold[i];
-    if (min > Math.abs(a - b)) {
-      min = Math.abs(a - b);
-      res[0] = [a, b];
-    }
-  }
-  return res;
+  return result;
 }
 
 for (let i = 1; i <= T; i++) {
   const n = Number(input[i]);
 
-  const primes = findPrime(n);
-  const result = goldBach(n, primes);
-  console.log(result.flat().join(' '));
+  const result = goldBach(n);
+  console.log(result.join(' '));
 }
