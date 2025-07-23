@@ -51,7 +51,7 @@ class Heap {
         this.items[rightChild][1] < this.items[leftChild][1]
           ? rightChild
           : leftChild;
-      if (this.items[index] <= this.items[smallerChild]) break;
+      if (this.items[index][1] <= this.items[smallerChild][1]) break;
       this.swap(index, smallerChild);
       index = smallerChild;
     }
