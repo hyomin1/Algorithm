@@ -1,6 +1,6 @@
 function solution(nums) {
     var answer = 0;
-    const N = nums.length / 2;
-    const size = new Set(nums).size;
-    return N <= size ? N : size;
+    const set = new Set(nums);
+    answer = set.size > nums.length / 2 ? nums.length / 2 : set.size;
+    return answer;
 }
