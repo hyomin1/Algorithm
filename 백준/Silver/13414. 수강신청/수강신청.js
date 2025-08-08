@@ -8,16 +8,12 @@ const input = fs
 
 const [K, L] = input[0].split(' ').map(Number);
 
-const map = new Map();
+const set = new Set();
 
 for (let i = 1; i <= L; i++) {
   const num = input[i];
-  if (!map.has(num)) {
-    map.set(num, 0);
-  } else {
-    map.delete(num);
-    map.set(num, 0);
-  }
+  set.delete(num);
+  set.add(num);
 }
-const answer = [...map.keys()].slice(0, K);
-answer.forEach((v) => console.log(v));
+const answer = [...set].slice(0, K);
+console.log([...set].slice(0, K).join('\n'));
