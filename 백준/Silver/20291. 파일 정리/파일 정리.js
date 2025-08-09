@@ -9,7 +9,7 @@ const input = fs
 const N = parseInt(input[0]);
 const obj = {};
 for (let i = 1; i <= N; i++) {
-  const [_, plus] = input[i].split('.');
+  const plus = input[i].split('.')[1];
   obj[plus] = (obj[plus] || 0) + 1;
 }
 
@@ -17,6 +17,9 @@ const answer = [...Object.entries(obj)].sort((a, b) =>
   a[0].localeCompare(b[0])
 );
 
-answer.forEach((v) => {
-  console.log(v[0], v[1]);
-});
+let str = '';
+for (const [key, value] of answer) {
+  str += `${key} ${value}\n`;
+}
+
+console.log(str);
