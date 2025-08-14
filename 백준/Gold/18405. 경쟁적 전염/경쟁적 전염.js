@@ -14,22 +14,18 @@ const dy = [1, -1, 0, 0];
 const board = input.slice(1, N + 1).map((line) => line.split(' ').map(Number));
 const [S, X, Y] = input[N + 1].split(' ').map(Number);
 
-const virus = board
-  .flat()
-  .filter((v) => v !== 0)
-  .sort((a, b) => a - b);
-
 const queue = [];
 
-for (const v of virus) {
-  for (let y = 0; y < board.length; y++) {
-    for (let x = 0; x < board[y].length; x++) {
-      if (board[y][x] === v) {
-        queue.push([v, y, x, 0]);
-      }
+for (let y = 0; y < board.length; y++) {
+  for (let x = 0; x < board[y].length; x++) {
+    if (board[y][x] !== 0) {
+      queue.push([board[y][x], y, x, 0]);
     }
   }
 }
+
+queue.sort((a, b) => a[0] - b[0]);
+
 let time = 0;
 while (queue.length && time < S) {
   const length = queue.length;
