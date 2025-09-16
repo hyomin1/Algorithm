@@ -1,14 +1,18 @@
 function solution(s)
 {
-    let answer = 0;
+    var answer = -1;
+
     const stack = [];
-    
-    for (let i = 0; i < s.length; i++) {
+    for (const ch of s) {
+        if (stack.length === 0) {
+            stack.push(ch);
+            continue;
+        }
         const top = stack[stack.length - 1];
-        const c = s[i];
-        if (stack.length === 0 || top !== c) stack.push(c);
-        else if (top === c) stack.pop();
+        if (top === ch) stack.pop();
+        else stack.push(ch);
     }
+
     answer = stack.length === 0 ? 1 : 0;
     return answer;
 }
