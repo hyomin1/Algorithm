@@ -1,29 +1,27 @@
 function solution(s) {
     var answer = 0;
-    const len = s.length;
-    for (let i = 0; i < len; i++) {
-        let checked = true;
+    
+    function isRight(str) {
         const stack = [];
-        for (let j = 0; j < len; j++) {     
-            const c = s[(i+j) % len];
-            if (c === '(' || c === '{' || c === '[') {
-                stack.push(c);
+        for (const ch of str) {
+            if (ch === '(' || ch === '{' || ch === '[') {
+                stack.push(ch);
             } else {
-                if (stack.length === 0) {
-                    checked = false;
-                    break;
-                } else {
-                    const top = stack[stack.length - 1];
-                    if (c ===')' && top === '(') stack.pop();
-                    else if (c === '}' && top === '{') stack.pop();
-                    else if (c ===']' && top === '[') stack.pop();
-                }
+                if (stack.length === 0) return false;
+                const top = stack[stack.length-1];
+                if (ch ===')' && top ==='(') stack.pop();
+                else if (ch ==='}' && top === '{') stack.pop();
+                else if (ch === ']' && top === '[') stack.pop();
             }
-        }
-        if (checked && stack.length === 0) {
-            answer++;
-        }
             
+        }
+        
+        return stack.length === 0;
+    }
+    
+    for (let i = 0; i < s.length; i++) {
+        const rotated = s.slice(i) + s.slice(0,i);
+        if (isRight(rotated)) answer++;
     }
     return answer;
 }
