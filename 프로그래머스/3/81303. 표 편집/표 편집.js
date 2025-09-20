@@ -1,21 +1,21 @@
 function solution(n, k, cmd) {
     var answer = '';
-    const stack = [];
-    const down = Array(n).fill().map((_,i)=> i+1);
-    const up = Array(n).fill().map((_,i) => i-1);
+    const stack = []; // 최근 삭제된 행
+    const up = Array.from({length:n}).map((_,i)=> i-1);
+    const down = Array.from({length:n}).map((_,i)=> i+1);
     
     for (const c of cmd) {
         if (c[0] === 'C') {
             stack.push(k);
             up[down[k]] = up[k];
             down[up[k]] = down[k];
-            k = down[k] < n ? down[k] : up[k];                                                                 
+            // 행 선택 하기
+            k = down[k] < n ? down[k] : up[k];
         } else if (c[0] === 'Z') {
-            const restore = stack.pop();
-            down[up[restore]] = restore;
-            up[down[restore]] = restore;
-            
-        } else { // U or D
+            const undo = stack.pop();
+            up[down[undo]] = undo;
+            down[up[undo]] = undo;
+        } else {
             const [action, num] = c.split(' ');
             if (action === 'U') {
                 for (let i = 0; i < num; i++) {
@@ -28,11 +28,11 @@ function solution(n, k, cmd) {
             }
         }
     }
-    let arr = Array(n).fill('O');
+
+    const str = Array.from({length:n}).fill('O');
     for (const num of stack) {
-        arr[num] = 'X';
+        str[num] = 'X';
     }
- 
-    answer = arr.join('');
+    answer = str.join('');
     return answer;
 }
