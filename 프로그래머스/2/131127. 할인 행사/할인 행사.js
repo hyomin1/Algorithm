@@ -1,9 +1,8 @@
-function isRight(obj1, obj2) {
-    const obj1Keys = Object.keys(obj1);
-    const obj2Keys = Object.keys(obj2);
-    if (obj1Keys.length !== obj2Keys.length) return false;
+function isEqual(obj1, obj2) {
+    if (Object.keys(obj1).length !== Object.keys(obj2).length)
+        return false;
     
-    for (const key of obj1Keys) {
+    for (const key in obj1) {
         if (obj1[key] !== obj2[key]) return false;
     }
     return true;
@@ -11,18 +10,17 @@ function isRight(obj1, obj2) {
 
 function solution(want, number, discount) {
     var answer = 0;
-    const obj = {};
+    const obj1 = {};
     for (let i = 0; i < want.length; i++) {
-        obj[want[i]] = number[i];
+        obj1[want[i]] = number[i];
     }
     
-    for (let i = 0; i <= discount.length - 10; i++) {
-        const dis = {};
+    for (let i = 0; i <= discount.length - 10 ;i++) {
+        const obj2 = {};
         for (let j = i; j < i + 10; j++) {
-            dis[discount[j]] = (dis[discount[j]] || 0 ) + 1;
-            
+            obj2[discount[j]] = (obj2[discount[j]] || 0) + 1;
         }
-        if(isRight(obj,dis)) answer++;
+        if (isEqual(obj1,obj2)) answer++;
     }
     return answer;
 }
