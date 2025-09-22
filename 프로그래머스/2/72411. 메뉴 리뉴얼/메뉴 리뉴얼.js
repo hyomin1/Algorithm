@@ -1,37 +1,35 @@
-function combinations(arr, n) {
-    if (n === 1) return arr.map((v) => [v]);
-    const result = [];
-    
-    arr.forEach((fixed, idx, origin) => {
-        const rest = origin.slice(idx + 1);
-        const combis = combinations(rest, n - 1);
-        const combine = combis.map((v) => [fixed, ...v]);
-        result.push(...combine);
-    });
-    return result;
-}
-
 function solution(orders, course) {
     var answer = [];
-    for (const c of course) {
-        const menu = [];
-        for (const o of orders) {
-            const order = o.split('').sort();
-            const comb = combinations(order,c);
-            menu.push(...comb);
+    
+    function dfs(menus, start, depth, maxDepth,path,setMenu) {
+        if (depth === maxDepth) {
+            const key = path.join('');
+            setMenu[key] = (setMenu[key] || 0) + 1;
+            return;
         }
-        const counter = {};
-        for (const m of menu) {
-            const key = m.join('');
-            counter[key] = (counter[key] || 0) + 1;
-        }
-        const max = Math.max(...Object.values(counter));
-        if (max > 1) {
-            for (const [key, value] of Object.entries(counter)) {
-                if(value === max) answer.push(key);
-            }
+        for (let i = start; i < menus.length; i++) {
+            path.push(menus[i]);
+            dfs(menus,i+1,depth+1, maxDepth, path,setMenu);
+            path.pop();
+            
         }
     }
     
-    return answer.sort();
+    for (const c of course) {
+        const setMenu = {};
+        for (const order of orders) {
+            const sorted = order.split('').sort();
+            if (sorted.length < c) continue;
+            dfs(sorted,0,0,c,[],setMenu);
+        }
+        
+        const max = Math.max(...Object.values(setMenu));
+        for (const key in setMenu) {
+            if (setMenu[key] === max && max >= 2) {
+                answer.push(key);
+            }
+        }
+    }
+    answer.sort();
+    return answer;
 }
