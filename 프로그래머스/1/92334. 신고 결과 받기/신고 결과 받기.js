@@ -1,26 +1,29 @@
 function solution(id_list, report, k) {
     var answer = [];
-    const map = {};
-    const count = {};
-    for (const id of id_list) {
-        map[id] = [];
-        count[id] = 0;
-    }
+    const reportedNumber = {};
+    const reportedId = {};
     for (const r of report) {
-        const [a, b] = r.split(' ');
-        if(!map[a].includes(b)) map[a].push(b);
+        const [reporter,reported] = r.split(' ');
+        if (!reportedId[reporter]) reportedId[reporter] = [];
+        if (!reportedId[reporter].includes(reported)) {
+            reportedId[reporter].push(reported);
+            reportedNumber[reported] = (reportedNumber[reported] || 0)+1;
+        }
+        
     }
-    
-    const keys = Object.keys(map);
-    for (const key of keys) {
-        map[key].forEach((v) => count[v]++);
-    }
-    for (const key of keys) {
-        let i = 0;
-        map[key].forEach((v) => {
-            if (count[v] >= k) i++;
-        })
-        answer.push(i);
+    const stopped = Object.entries(reportedNumber).filter((v) => v[1] >= k).map((v) => v[0]);
+
+    for (const id of id_list) {
+        let count = 0;
+        if (!reportedId[id]) {
+            answer.push(count);
+            continue;
+        }
+        for (let i = 0; i < reportedId[id].length; i++) {
+            if(stopped.includes(reportedId[id][i])) count++;
+        }
+        answer.push(count);
+        
     }
     return answer;
 }
