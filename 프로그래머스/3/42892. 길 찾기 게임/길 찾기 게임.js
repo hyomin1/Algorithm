@@ -1,6 +1,7 @@
 class Node {
-    constructor(info, num, left = null, right = null) {
-        this.info = info;
+    constructor(x,y, num, left = null, right = null) {
+        this.x = x;
+        this.y = y;
         this.num = num;
         this.left = left;
         this.right = right;
@@ -13,22 +14,20 @@ class Node {
     }
 }
 
-function makeBT(nodeinfo) {
-    nodeinfo = nodeinfo.map((v, i) => [...v ,i+1]);
+function makeTree(nodeinfo) {
+    nodeinfo = nodeinfo.map((v,i) => [...v,i+1]);
     nodeinfo.sort((a,b) => {
-        if(a[1] === b[1]) {
-            return a[0] - b[0];
-        }
+        if (a[1] === b[1]) return a[0] - b[0];
         return b[1] - a[1];
     });
     let root = null;
-    for (const node of nodeinfo) {
-        if(!root) root = new Node([node[0],node[1]],node[2]);
+    for (const [x,y, num] of nodeinfo) {
+        if (root === null) root = new Node(x,y,num);
         else {
             let parent = root;
-            const newNode = new Node([node[0],node[1]],node[2]);
-            while(true) {
-                if(newNode.info[0] < parent.info[0]) {
+            const newNode = new Node(x,y,num);
+            while (true) {
+                if (newNode.x < parent.x) {
                     if (parent.hasLeft()) {
                         parent = parent.left;
                         continue;
@@ -39,7 +38,7 @@ function makeBT(nodeinfo) {
                     if (parent.hasRight()) {
                         parent = parent.right;
                         continue;
-                    } 
+                    }
                     parent.right = newNode;
                     break;
                 }
@@ -47,27 +46,34 @@ function makeBT(nodeinfo) {
         }
     }
     return root;
+    
 }
 
-function preOrder(root,answer) {
-    if (root === null) return;
-    answer.push(root.num);
-    preOrder(root.left,answer);
-    preOrder(root.right,answer);
+function preOrder(node,arr) {
+    if(node == null) return;
+    arr.push(node.num);
+    preOrder(node.left,arr);
+    preOrder(node.right,arr);
 }
 
-function postOrder(root,answer){
-    if (root === null) return;
-    postOrder(root.left,answer);
-    postOrder(root.right,answer);
-    answer.push(root.num);
+function postOrder(node, arr) {
+    if (node === null) return;
+    postOrder(node.left,arr);
+    postOrder(node.right,arr);
+    arr.push(node.num);
+
 }
+
 
 function solution(nodeinfo) {
-    var answer = [[],[]];
+    var answer = [[]];
+    const root = makeTree(nodeinfo);
+    const arr1 = [];
+    const arr2 = [];
     
-    const root = makeBT(nodeinfo);
-    preOrder(root,answer[0]);
-    postOrder(root,answer[1]);
+    preOrder(root,arr1);
+    postOrder(root,arr2);
+    answer[0] = arr1;
+    answer[1] = arr2;
     return answer;
 }
