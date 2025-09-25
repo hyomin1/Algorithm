@@ -1,40 +1,33 @@
 function solution(info, edges) {
     var answer = 0;
-    const tree = {};
-    for (const [parent,child] of edges) {
-        if (!tree[parent]) tree[parent] = [];
-        tree[parent].push(child);
+    const tree = Array.from({length:info.length},() => []);
+    for (const [start,end] of edges) {
+        tree[start].push(end)
     }
-    const queue = [];
-    let maxSheep = 0;
-    queue.push([0,1,0,new Set()]);
-    while(queue.length > 0) {
-        const [node,sheep,wolf,visited] = queue.shift();
+    const queue = [[0,1,0,new Set()]];
+    
+    while (queue.length) {
+        const [currentNode, sheep, wolf, willVisit] = queue.shift();
+        answer = Math.max(answer,sheep);
         
-        maxSheep = Math.max(maxSheep,sheep);
-        
-        if (tree[node]) {
-            for (const next of tree[node]) {
-            visited.add(next);
-            }
-        }
-        
-        
-        for (const next of visited) {
-            if(info[next]) {
-                if(sheep > wolf + 1) {
-                    
-                const newVisited = new Set(visited);
-                newVisited.delete(next);
-                queue.push([next,sheep,wolf + 1,newVisited]);
+        for (const next of tree[currentNode] || []) {
+            willVisit.add(next);
+        } 
+        for (const next of willVisit) {
+            if (info[next] === 1) {
+                if (sheep > wolf + 1) {
+                    const newWillVisit = new Set(willVisit);
+                    newWillVisit.delete(next);
+                    queue.push([next,sheep,wolf+1,newWillVisit]);
                 }
-            } else {
-                const newVisited = new Set(visited);
-                newVisited.delete(next);
-                queue.push([next,sheep+1,wolf,newVisited]);
+                
+            } else if (info[next] === 0) {
+                const newWillVisit = new Set(willVisit);
+                newWillVisit.delete(next);
+                queue.push([next,sheep+1,wolf,newWillVisit]);
+                
             }
         }
-        
     }
-    return maxSheep;
+    return answer;
 }
