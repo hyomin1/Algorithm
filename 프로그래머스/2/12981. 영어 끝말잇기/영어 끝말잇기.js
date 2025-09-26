@@ -1,15 +1,22 @@
 function solution(n, words) {
-    var answer = [0, 0];
+    var answer = [0,0];
+    
     const set = new Set();
-    set.add(words[0]);
-    for (let i = 1; i < words.length; i++) {
-        const prev = words[i-1].slice(-1);
-        const cur = words[i].slice(0,1);
-        if (prev !== cur || set.has(words[i])) {
-            answer =[i % n + 1,Math.floor(i / n) + 1];
-            break;
+    
+    for (let i = 0; i < words.length; i++) {
+        const word = words[i];
+        if (i === 0) {
+            set.add(word);
+            continue;
         }
-        set.add(words[i]);
+        if (set.has(word) || words[i-1][words[i-1].length-1] !== word[0]) {
+            answer[0] = i % n + 1;
+            answer[1] = Math.floor(i/n) + 1;
+            return answer;
+        }
+        set.add(word);
     }
+   
+
     return answer;
 }
