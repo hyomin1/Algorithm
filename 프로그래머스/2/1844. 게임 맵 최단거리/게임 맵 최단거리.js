@@ -1,30 +1,23 @@
-function solution(maps) {
-    var answer = 0;
+function solution(maps) {    
+    const dirs = [[0,1],[0,-1],[1,0],[-1,0]];
     
-    const dx = [0,0,1,-1];
-    const dy = [1,-1,0,0];
-    const n = maps.length;
-    const m = maps[0].length;
-    
-    const queue = [[0,0]];
-    const visited = Array(n).fill().map(() => Array(m).fill(-1));
-    visited[0][0] = 1;
-    
-    function isValidMove(x,y) {
-        return x >= 0 && x < m && y >= 0 && y < n && visited[y][x] === -1 && maps[y][x] === 1;
-    }
-    
+    const queue = [[0,0,0]];
+    const N = maps.length;
+    const M = maps[0].length;
+    const visited = Array.from({length:N}, () => Array(M).fill(false));
+    visited[0][0] = true;
     while (queue.length) {
-        const [y,x] = queue.shift();
+        const [y,x,count] = queue.shift();
+        if (y === N - 1 && x === M - 1) return count + 1;
         
-        for (let i = 0; i < 4; i++) {
-            const nx = dx[i] + x;
-            const ny = dy[i] + y;
-            if(!isValidMove(nx,ny)) continue;
-            visited[ny][nx] = visited[y][x] + 1;
-            queue.push([ny,nx]);
+        for (const [dy, dx] of dirs) {
+            const nx = dx + x;
+            const ny = dy + y;
+            if (nx >= 0 && nx < M && ny >= 0 && ny < N && !visited[ny][nx] && maps[ny][nx] === 1) {
+                visited[ny][nx] = true;
+                queue.push([ny,nx,count+1]);
+            }
         }
     }
-    answer = visited[n-1][m-1];
-    return answer;
+    return -1;
 }
