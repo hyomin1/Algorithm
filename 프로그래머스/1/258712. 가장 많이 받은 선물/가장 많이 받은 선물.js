@@ -1,57 +1,50 @@
 function solution(friends, gifts) {
     var answer = 0;
-    const giveMap = {}; // 준 선물 개수
-    const receiveMap = {}; // 받은 선물 개수
-    const map = {};
-    const giftMap = {}; // 선물 지수
-    
-    const answerMap = {};
-    for (let i = 0; i < friends.length; i++) {
-        giveMap[friends[i]] = 0;
-        receiveMap[friends[i]] = 0;
-        answerMap[friends[i]] = 0;
-        map[friends[i]] = {};
+    const give = {};
+    const receive = {};
+    const giftPoint = {}; // 선물 지수
+    const list = {};  // 선물 거래 내역
+    const result = {};
+    for (const f of friends) {
+        give[f] = 0;
+        receive[f] = 0;
+        list[f] = {};
+        result[f] = 0;
     }
-    for (let i = 0; i < friends.length; i++) {
-        const me = friends[i];
-        for (let j = 0; j <friends.length; j++) {
-            const other = friends[j];
-            if (me === other) continue;
-            map[me][other] = 0;
-        }
+       
+    for (const gift of gifts) {
+        const [A, B] = gift.split(' ');
+        give[A]++;
+        receive[B]++;
+        list[A][B] = (list[A][B] || 0) + 1;
     }
-    
-    for (let i = 0; i < gifts.length; i++) {
-        const [giver,receiver] = gifts[i].split(' ');
-        giveMap[giver]++;
-        receiveMap[receiver]++;
-        map[giver][receiver]++;;
+    for (const f of friends) {
+        giftPoint[f] = give[f] - receive[f];
     }
-    for (let i = 0; i < friends.length; i++) {
-        const name = friends[i];
-        giftMap[name] = giveMap[name] - receiveMap[name];
-    }
-    console.log(map);
-    for (let i = 0; i < friends.length; i++) {
-        const me = friends[i];
-        for (let j = i + 1; j < friends.length; j++) {
-            const other = friends[j];
-           
-            if (map[me][other] > map[other][me]) {
-                answerMap[me]++;
+    for (const g of friends) {
+        for (const r of friends) {
+            if (g === r) continue; // 동일인물 제외
+            if (list[g][r] && !list[r][g]) {
+                result[g]++;
+                continue;
             }
-            else if (map[me][other] < map[other][me]) {
-                answerMap[other]++;
+            if (!list[g][r] && list[r][g]) {
+                result[r]++;
+                continue;
             }
-            else {
-                if (giftMap[me] > giftMap[other]) answerMap[me]++;
-                else if (giftMap[me] < giftMap[other]) answerMap[other]++;
+            if (list[g][r] && list[r][g]) { // 주고 받은 기록 존재
+                if (list[g][r] > list[r][g]) result[g]++;
+                else if (list[g][r] < list[r][g]) result[r]++;
+                else {
+                    if (giftPoint[g] > giftPoint[r]) result[g]++;
+                    else if (giftPoint[r] > giftPoint[g]) result[r]++;
+                }
+            } else {
+                if (giftPoint[g] > giftPoint[r]) result[g]++;
+                else if (giftPoint[r] > giftPoint[g]) result[r]++;
             }
         }
     }
-    const arr = Object.values(answerMap);
-  
-    answer = Math.max(...arr);
-   
+    answer = Math.max(...Object.values(result)) / 2;
     return answer;
 }
