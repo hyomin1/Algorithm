@@ -1,38 +1,25 @@
 function solution(fees, records) {
     var answer = [];
-    const answerMap = {};
-    const parkMap = {};
-    for (record of records) {
-        const [time,carNum,info] = record.split(' ');
-        const [hour,minute] = time.split(':').map(Number);
-        if(info === 'IN') {
-            parkMap[carNum] = hour * 60 + minute;
-        } else { // OUT
-            answerMap[carNum] = (answerMap[carNum] || 0) + hour * 60 + minute - parkMap[carNum];
-            parkMap[carNum] = -1;
-                    
-        }
+    const [baseTime, baseFee, unitTime, unitFee] = fees;
+    const car = {};
+    for (const r of records) {
+        const [time, num, type] = r.split(' ');
+        if (!car[num]) car[num] = 0;
+        const [hour, minute] = time.split(':').map(Number);
+        if (type === 'IN') {
+            car[num] -= hour * 60 + minute;
+        } else car[num] += hour * 60 + minute;
     }
-    
-    const keys = Object.keys(parkMap);
-    const endTime = 60 * 23 + 59;
+    for (const num in car) {
+        if (car[num] <= 0) car[num] += 23 * 60 + 59;
+    }
+    const keys = Object.keys(car).sort();
     for (const key of keys) {
-        if(parkMap[key] > -1) {
-            const duration = endTime - parkMap[key];
-            answerMap[key] = (answerMap[key] || 0) + duration;
-        }
-    }
-    const [basicTime, basicFee, unitTime,unitFee] = fees;
-    const answerKeys = Object.keys(answerMap);
-    for (const key of answerKeys) {
-        if (answerMap[key] <= basicTime) {
-            answerMap[key] = basicFee;
-        } else {
-            const time = answerMap[key] - basicTime;
-            answerMap[key] = basicFee + Math.ceil(time / unitTime) * unitFee
+        if (car[key] <= baseTime) answer.push(baseFee);
+        else {
+            answer.push(baseFee + Math.ceil((car[key] - baseTime) / unitTime) * unitFee);
         }
     }
     
-    answer = Object.keys(answerMap).sort().map((v) => answerMap[v]); 
     return answer;
 }
