@@ -1,0 +1,107 @@
+const fs = require('fs');
+const input = fs
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : './input.txt')
+  .toString()
+  .trim()
+  .replace(/\r/g, '')
+  .split('\n');
+
+class MinHeap {
+  constructor() {
+    this.items = [];
+  }
+  size() {
+    return this.items.length;
+  }
+
+  push(item) {
+    this.items.push(item);
+    this.bubbleUp();
+  }
+  pop() {
+    if (this.size() === 0) return null;
+    const min = this.items[0];
+    this.items[0] = this.items[this.size() - 1];
+    this.items.pop();
+    this.bubbleDown();
+
+    return min;
+  }
+  swap(a, b) {
+    [this.items[a], this.items[b]] = [this.items[b], this.items[a]];
+  }
+  bubbleUp() {
+    let i = this.size() - 1;
+    while (i > 0) {
+      const p = Math.floor((i - 1) / 2);
+      if (this.items[p][1] <= this.items[i][1]) break;
+      this.swap(i, p);
+      i = p;
+    }
+  }
+  bubbleDown() {
+    let i = 0;
+    while (i * 2 + 1 < this.size()) {
+      const l = i * 2 + 1;
+      const r = i * 2 + 2;
+      const s = r < this.size() && this.items[r][1] < this.items[l][1] ? r : l;
+      if (this.items[i][1] <= this.items[s][1]) break;
+
+      this.swap(i, s);
+      i = s;
+    }
+  }
+}
+
+const [N, M] = input[0].split(' ').map(Number);
+
+const info = input.slice(1).map((v) => v.split(' ').map(Number));
+const answer = Array.from({ length: N }, () => Array(N).fill('-'));
+const graph = {};
+for (let i = 1; i <= N; i++) {
+  graph[i] = [];
+}
+
+for (const [u, v, w] of info) {
+  graph[u].push([v, w]);
+  graph[v].push([u, w]);
+}
+
+function dijkstra(start) {
+  const heap = new MinHeap();
+  const distance = Array.from({ length: N + 1 }).fill(Infinity);
+  const parent = Array.from({ length: N + 1 }).fill(-1);
+  distance[start] = 0;
+  heap.push([start, 0]);
+
+  while (heap.size()) {
+    const [node, cost] = heap.pop();
+    if (cost > distance[node]) continue;
+
+    for (const [next, nextCost] of graph[node]) {
+      const newCost = cost + nextCost;
+      if (newCost < distance[next]) {
+        distance[next] = newCost;
+        heap.push([next, newCost]);
+        parent[next] = node;
+      }
+    }
+  }
+  return parent;
+}
+
+for (let start = 1; start <= N; start++) {
+  const parent = dijkstra(start);
+
+  for (let end = 1; end <= N; end++) {
+    if (start === end) continue;
+
+    let current = end;
+    while (parent[current] !== start) {
+      current = parent[current];
+    }
+    answer[start - 1][end - 1] = current;
+  }
+}
+
+answer.forEach((v) => console.log(v.join(' ')));
