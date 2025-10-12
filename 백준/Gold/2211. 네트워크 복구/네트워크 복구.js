@@ -41,7 +41,7 @@ class MinHeap {
   }
   bubbleDown() {
     let i = 0;
-    while (i * 2 + 1 < 0) {
+    while (i * 2 + 1 < this.size()) {
       const l = i * 2 + 1;
       const r = i * 2 + 2;
       const s = r < this.size() && this.items[r][1] < this.items[l][1] ? r : l;
@@ -56,11 +56,7 @@ const [N, M] = input[0].split(' ').map(Number);
 
 const info = input.slice(1).map((line) => line.split(' ').map(Number));
 
-const graph = {};
-
-for (let i = 1; i <= N; i++) {
-  graph[i] = [];
-}
+const graph = Array.from({ length: N + 1 }, () => []);
 
 for (const [u, v, w] of info) {
   graph[u].push([v, w]);
@@ -69,6 +65,7 @@ for (const [u, v, w] of info) {
 
 // 1번 컴퓨터 슈퍼 컴퓨터
 const start = 1;
+
 const heap = new MinHeap();
 const dist = Array.from({ length: N + 1 }).fill(Infinity);
 const parent = Array.from({ length: N + 1 }).fill(-1);
@@ -89,19 +86,10 @@ while (heap.size()) {
   }
 }
 
-const path = new Set();
-
+const edges = [];
 for (let i = 2; i <= N; i++) {
-  let cur = i;
-  if (parent[cur] === start) {
-    path.add(`${cur},${parent[cur]},${parent[cur]},${cur}`);
-    continue;
-  }
-  while (parent[cur] !== start) {
-    path.add(`${cur},${parent[cur]},${parent[cur]},${cur}`);
-    cur = parent[cur];
-  }
+  edges.push([i, parent[i]]);
 }
-console.log(path.size);
-const answer = Array.from(path).map((v) => v.split(','));
-answer.forEach((v) => console.log(v[0], v[1]));
+
+console.log(edges.length);
+edges.forEach(([a, b]) => console.log(a, b));
