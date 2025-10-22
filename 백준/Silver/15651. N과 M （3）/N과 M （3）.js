@@ -8,13 +8,10 @@ const input = fs
 
 const [N, M] = input[0].split(' ').map(Number);
 
-const arr = [];
-
-for (let i = 0; i < N; i++) {}
-
+const res = [];
 function dfs(path) {
   if (path.length === M) {
-    arr.push(path.join(' '));
+    res.push(path.join(' '));
     return;
   }
 
@@ -24,4 +21,4 @@ function dfs(path) {
 }
 dfs([]);
 
-console.log(arr.join('\n'));
+console.log(res.join('\n'));
