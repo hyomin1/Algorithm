@@ -7,23 +7,23 @@ const input = fs
   .split('\n');
 
 const [N, M] = input[0].split(' ').map(Number);
-
-const visited = new Set();
-
-for (let i = 0; i < N; i++) {}
-const arr = [];
+const set = new Set();
+const res = [];
 function dfs(path) {
   if (path.length === M) {
-    console.log(path.join(' '));
+    res.push([...path]);
     return;
   }
 
   for (let i = 1; i <= N; i++) {
-    if (!visited.has(i)) {
-      visited.add(i);
+    if (!set.has(i)) {
+      set.add(i);
       dfs([...path, i]);
-      visited.delete(i);
+      set.delete(i);
     }
   }
 }
+
 dfs([]);
+
+res.forEach((v) => console.log(v.join(' ')));
