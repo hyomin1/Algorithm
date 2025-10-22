@@ -1,4 +1,3 @@
-const { ifError } = require('assert');
 const fs = require('fs');
 const input = fs
   .readFileSync(process.platform === 'linux' ? '/dev/stdin' : './input.txt')
@@ -9,15 +8,17 @@ const input = fs
 
 const [N, M] = input[0].split(' ').map(Number);
 
-const set = new Set();
-function dfs(depth, start, path) {
-  if (depth === M) {
-    console.log(path.join(' '));
+const res = [];
+function dfs(start, path) {
+  if (path.length === M) {
+    res.push(path.join(' '));
     return;
   }
+
   for (let i = start; i <= N; i++) {
-    dfs(depth + 1, i, [...path, i]);
+    dfs(i, [...path, i]);
   }
 }
+dfs(1, []);
 
-dfs(0, 1, []);
+console.log(res.join('\n'));
