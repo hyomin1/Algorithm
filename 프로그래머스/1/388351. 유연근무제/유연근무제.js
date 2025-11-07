@@ -19,7 +19,8 @@ function solution(schedules, timelogs, startday) {
             day++;
             
         }
-        if (found) answer++;
+        if (found) 
+            answer++;
     }
     return answer;
 }
