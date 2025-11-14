@@ -14,9 +14,9 @@ const res = arr[arr.length - 1];
 
 const dp = Array.from({ length: N }, () => Array(21).fill(0n));
 
-if (arr[0] >= 0 && arr[0] <= 20) {
+
   dp[0][arr[0]] = 1n;
-}
+
 
 for (let i = 1; i <= N - 2; i++) {
   const val = arr[i];
