@@ -18,7 +18,7 @@ let count = 0;
 
 while (front < queue.length) {
   const [pos, time] = queue[front++];
-
+  if (time > answer) continue;
   if (pos === K) {
     if (time < answer) {
       answer = time;
