@@ -1,98 +1,79 @@
 const fs = require('fs');
-const input = fs.readFileSync('./dev/stdin').toString().trim().split('\n');
-const N = +input.shift();
-const MAP = input.map((v) => v.split(' ').map(Number));
+const input = fs
+  .readFileSync(process.platform === 'linux' ? '/dev/stdin' : './input.txt')
+  .toString()
+  .trim()
+  .replace(/\r/g, '')
+  .split('\n');
 
-let answer = Infinity;
-for (let x = 1; x + 2 <= N; x++) {
-        for (let y = 1; y <= N; y++) {
-                for (let d1 = 1; y - d1 > 0; d1++) {
-                        for (let d2 = 1; y + d2 <= N; d2++) {
-                                if (x + d1 + d2 > N) continue;
+const N = parseInt(input[0]);
 
-                                let temp = Array.from(Array(N), () => Array(N).fill(-1));
-                                //좌상
-                                for (let i = x, j = y; i <= x + d1 && j >= y - d1; i++, j--) {
-                                        temp[i - 1][j - 1] = 5;
-                                }
+const board = input.slice(1).map((v) => v.split(' ').map(Number));
 
-                                //우상
-                                for (let i = x, j = y; i <= x + d2 && j <= y + d2; i++, j++) {
-                                        temp[i - 1][j - 1] = 5;
-                                }
+function calculate(x, y, d1, d2) {
+  const person = [0, 0, 0, 0, 0]; // 1, 2, 3, 4, 5번 선거구 인구
 
-                                //좌하
-                                for (let i = x + d1, j = y - d1; i <= x + d1 + d2 && j <= y - d1 + d2; i++, j++) {
-                                        temp[i - 1][j - 1] = 5;
-                                }
+  for (let r = 0; r < N; r++) {
+    for (let c = 0; c < N; c++) {
+      const value = board[r][c];
+      let area = 0;
 
-                                //우하
-                                for (let i = x + d2, j = y + d2; i <= x + d2 + d1 && j >= y + d2 - d1; i++, j--) {
-                                        temp[i - 1][j - 1] = 5;
-                                }
+      // 1. 5번 영역 경계선 위의 점 확인
+      if (
+        // 경계 1: (x, y) -> (x+d1, y-d1)
+        (r >= x && r <= x + d1 && c === y - (r - x)) ||
+        // 경계 2: (x, y) -> (x+d2, y+d2)
+        (r >= x && r <= x + d2 && c === y + (r - x)) ||
+        // 경계 3: (x+d1, y-d1) -> (x+d1+d2, y-d1+d2)
+        (r >= x + d1 && r <= x + d1 + d2 && c === y - d1 + (r - (x + d1))) ||
+        // 경계 4: (x+d2, y+d2) -> (x+d1+d2, y-d1+d2)
+        (r >= x + d2 && r <= x + d1 + d2 && c === y + d2 - (r - (x + d2)))
+      ) {
+        area = 5;
+      }
+      // 2. 1~4번 영역 조건 (5번 경계에 닿지 않도록 조건 추가)
+      else if (r < x + d1 && c <= y && r + c < x + y) {
+        // 1번 선거구: r < x+d1, c <= y, (경계 2 바깥)
+        area = 1;
+      } else if (r <= x + d2 && c > y && r - c < x - y) {
+        // 2번 선거구: r <= x+d2, c > y, (경계 1 바깥)
+        area = 2;
+      } else if (r >= x + d1 && c < y - d1 + d2 && r - c > x - y + 2 * d1) {
+        // 3번 선거구: r >= x+d1, c < y-d1+d2, (경계 4 바깥)
+        // Note: The conditional logic for r-c can be tricky based on coordinate system.
+        // A simpler way for 3 and 4: use the r+c < x+y+2d2 (3) and r-c > x-y-2d1 (4) conditions derived from line equations.
+        area = 3;
+      } else if (r > x + d2 && c >= y - d1 + d2 && r + c > x + y + 2 * d2) {
+        // 4번 선거구: r > x+d2, c >= y-d1+d2, (경계 3 바깥)
+        area = 4;
+      }
+      // 3. 1~4번 영역 조건에 모두 해당하지 않으면, 5번 영역 내부!
+      else {
+        area = 5;
+      }
 
-                                let p = [0, 0, 0, 0, 0];
+      // 인덱스는 0~4이므로, area-1을 사용합니다.
+      person[area - 1] += value;
+    }
+  }
 
-                                //1번
-                                for (let i = 1; i < x + d1; i++) {
-                                        for (let j = 1; j <= y; j++) {
-                                                if (temp[i - 1][j - 1] == 5) {
-                                                        break;
-                                                }
-                                                temp[i - 1][j - 1] = 0;
-                                                p[0] += MAP[i - 1][j - 1];
-                                        }
-                                }
-
-                                //2번
-                                for (let i = 1; i <= x + d2; i++) {
-                                        for (let j = N; j > y; j--) {
-                                                if (temp[i - 1][j - 1] == 5) {
-                                                        break;
-                                                }
-                                                temp[i - 1][j - 1] = 1;
-                                                p[1] += MAP[i - 1][j - 1];
-                                        }
-                                }
-
-                                //3번
-                                for (let i = x + d1; i <= N; i++) {
-                                        for (let j = 1; j < y - d1 + d2; j++) {
-                                                if (temp[i - 1][j - 1] == 5) {
-                                                        break;
-                                                }
-                                                temp[i - 1][j - 1] = 2;
-                                                p[2] += MAP[i - 1][j - 1];
-                                        }
-                                }
-
-                                //4번
-                                for (let i = x + d2 + 1; i <= N; i++) {
-                                        for (let j = N; j >= y - d1 + d2; j--) {
-                                                if (temp[i - 1][j - 1] == 5) {
-                                                        break;
-                                                }
-                                                temp[i - 1][j - 1] = 3;
-                                                p[3] += MAP[i - 1][j - 1];
-                                        }
-                                }
-
-                                // 5번
-                                for (let i = 1; i <= N; i++) {
-                                        for (let j = 1; j <= N; j++) {
-                                                if (temp[i - 1][j - 1] == -1 || temp[i - 1][j - 1] == 5) {
-                                                        temp[i - 1][j - 1] = 4;
-                                                        p[4] += MAP[i - 1][j - 1];
-                                                }
-                                        }
-                                }
-
-                                const MAX = Math.max(...p);
-                                const MIN = Math.min(...p);
-                                answer = answer > MAX - MIN ? MAX - MIN : answer;
-                        }
-                }
-        }
+  return Math.max(...person) - Math.min(...person);
 }
 
+let answer = Infinity;
+
+for (let x = 0; x < N; x++) {
+  for (let y = 0; y < N; y++) {
+    for (let d1 = 1; d1 < N; d1++) {
+      for (let d2 = 1; d2 < N; d2++) {
+        if (x + d1 + d2 >= N) continue;
+        if (y - d1 < 0) continue;
+        if (y + d2 >= N) continue;
+
+        const diff = calculate(x, y, d1, d2);
+        answer = Math.min(answer, diff);
+      }
+    }
+  }
+}
 console.log(answer);
