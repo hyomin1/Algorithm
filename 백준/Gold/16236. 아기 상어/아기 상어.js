@@ -8,17 +8,7 @@ const input = fs
 
 const N = parseInt(input[0]);
 
-const board = input.slice(1).map((l) => l.split(' ').map(Number));
-
-let s = null;
-for (let y = 0; y < N; y++) {
-  for (let x = 0; x < N; x++) {
-    if (board[y][x] === 9) {
-      s = [y, x];
-      break;
-    }
-  }
-}
+const board = input.slice(1).map((v) => v.split(' ').map(Number));
 
 const dirs = [
   [0, 1],
@@ -27,64 +17,79 @@ const dirs = [
   [-1, 0],
 ];
 
-function bfs(y, x, size) {
+let time = 0;
+
+const shark = {
+  y: 0,
+  x: 0,
+  size: 2,
+  eat: 0,
+};
+for (let y = 0; y < N; y++) {
+  for (let x = 0; x < N; x++) {
+    if (board[y][x] === 9) {
+      shark.y = y;
+      shark.x = x;
+      board[y][x] = 0;
+    }
+  }
+}
+
+function bfs(y, x) {
   const queue = [[y, x, 0]];
   const visited = Array.from({ length: N }, () => Array(N).fill(false));
   visited[y][x] = true;
-  const pos = [];
+  const candidates = [];
+  let min = Infinity;
   while (queue.length) {
     const [y, x, dist] = queue.shift();
 
-    if (board[y][x] !== 0 && board[y][x] < size) {
-      pos.push([y, x, dist]);
-    }
+    if (dist > min) break;
 
     for (const [dy, dx] of dirs) {
       const ny = dy + y;
       const nx = dx + x;
-      if (
-        ny < 0 ||
-        ny >= N ||
-        nx < 0 ||
-        nx >= N ||
-        visited[ny][nx] ||
-        board[ny][nx] > size
-      )
-        continue;
-      queue.push([ny, nx, dist + 1]);
+      if (ny < 0 || ny >= N || nx < 0 || nx >= N || visited[ny][nx]) continue;
+
+      if (board[ny][nx] > shark.size) continue;
+
       visited[ny][nx] = true;
+      queue.push([ny, nx, dist + 1]);
+      if (board[ny][nx] > 0 && board[ny][nx] < shark.size) {
+        min = dist + 1;
+        candidates.push({ y: ny, x: nx, dist: dist + 1 });
+      }
     }
   }
-  return pos;
+
+  // 잡아먹을거 없는 경우
+  if (candidates.length === 0) return null;
+
+  candidates.sort((a, b) => {
+    if (a.dist !== b.dist) return a.dist - b.dist;
+    if (a.y !== b.y) return a.y - b.y;
+    return a.x - b.x;
+  });
+
+  return candidates[0];
 }
 
-let answer = 0;
-let size = 2;
-let [y, x] = s;
-let eat = 0;
-
 while (true) {
-  const fishes = bfs(y, x, size);
+  const fish = bfs(shark.y, shark.x);
+  if (!fish) break;
 
-  if (fishes.length === 0) break;
+  const { y, x, dist } = fish;
 
-  fishes.sort((a, b) => {
-    if (a[2] !== b[2]) return a[2] - b[2];
-    if (a[0] !== b[0]) return a[0] - b[0];
-    return a[1] - b[1];
-  });
-  const [fy, fx, dist] = fishes[0];
+  shark.y = y;
+  shark.x = x;
+  time += dist;
 
-  answer += dist;
   board[y][x] = 0;
-  y = fy;
-  x = fx;
-  board[y][x] = 0;
-  eat++;
-  if (eat === size) {
-    size++;
-    eat = 0;
+  shark.eat++;
+  if (shark.eat === shark.size) {
+    shark.size++;
+    shark.eat = 0;
   }
 }
 
-console.log(answer);
+console.log(time);
